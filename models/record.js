@@ -9,6 +9,9 @@ const recordSchema = new Schema({
     type: String,
     required: true
   },
+  icon: {
+    type: String,
+  },
   date: {
     type: String,
     required: true

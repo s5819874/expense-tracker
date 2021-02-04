@@ -1,0 +1,64 @@
+<div class="container d-flex flex-column align-items-center" style="height: 100vh;">
+  <div class="d-flex justify-content-between mt-5" style="min-width: 300px;">
+
+    <a role="button" href="/records/new" class="btn font-weight-bolder text-white" style="background-color: lightcoral;"
+      type="submit" id="new-button"><i class="fas fa-plus"></i>
+      Expense</a>
+
+    <div class="dropdown">
+      <button class="btn dropdown-toggle  font-weight-bolder text-white" style="background-color: lightseagreen;"
+        type="button" id="dropdownCategoryButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Category
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownCategoryButton">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </div>
+
+  </div>
+
+  <span class="border-bottom border-dark mt-5 pt-3">
+    <h2 class="font-weight-bolder">Total Amount:</h2>
+  </span>
+
+
+  <ul class="list-group list-group-flush mt-4">
+    {{#each records}}
+    <li class=" list-group-item border-0" style="width: 800px;">
+      <div class="row">
+        <div class="mx-auto border-bottom col-10 row d-flex align-items-center"
+          style="background-color:rgb(227, 243, 250); border-left: 5px solid lightseagreen;">
+          <div class="col-3 d-flex flex-row align-items-center justify-content-around">
+            <i class="text-muted font-weight-bolder mr-2">{{this.date}}</i>
+            <i class="{{this.icon}} fa-2x"></i>
+          </div>
+          <div class=" col-9 d-flex justify-content-between align-items-center border-botton"
+            style="background-color:rgb(252, 237, 190)">
+            <h3>
+              {{ this.name }}
+            </h3>
+            <h2>
+              ${{ this.amount }}
+            </h2>
+          </div>
+        </div>
+
+        <div class="col-1">
+
+          <a class="btn btn-outline-info mb-2" href="/records/{{ this._id }}/edit" style="width: 50px;"><i
+              class="far fa-edit"></i></a>
+
+          <form action="/records/{{ this._id }}?_method=DELETE" method="POST">
+
+            <button title="delete" class="delete btn btn-outline-secondary" type="submit" style="width: 50px;"
+              onclick="return confirm('Delete this expense!?')"><i class="far fa-trash-alt"></i></button>
+          </form>
+
+        </div>
+      </div>
+    </li>
+    {{/each}}
+  </ul>
+</div>
