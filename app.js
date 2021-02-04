@@ -11,9 +11,19 @@ const methodOverride = require('method-override')
 
 //function
 //計算金額
-async function getTotalAmount(keyword) {
+function getTotalAmount(keyword) {
   if (keyword) {
-    let totalAmount = Record.aggregate({ "$match": { category: keyword } }, { "$sum": "$amount" })
+    return (Record.aggregate([
+      {
+        $match: { category: keyword }
+      },
+      {
+        $group: {
+          _id: '',
+          sum: { $sum: "$amount" }
+        }
+      }
+    ]))
   } else {
     return (Record.aggregate([
       {
@@ -24,7 +34,6 @@ async function getTotalAmount(keyword) {
       }
     ]))
   }
-  //$project: {name:1}可以選欄位
 }
 
 //加入Icon屬性的值
@@ -139,3 +148,18 @@ app.delete('/records/:id', ((req, res) => {
 app.listen(port, () => {
   console.log('Express is now listening on the server!')
 })
+
+//瀏覽類別搜尋含金額
+app.get('/records/search_by_category/:category', ((req, res) => {
+  const keyword = req.params.category
+  Record.find({ category: keyword })
+    .lean()
+    .then(records => {
+      getTotalAmount(keyword)
+        .then(result => {
+          let totalAmount = result[0].sum
+          res.render('index', { records, totalAmount })
+        })
+    })
+    .catch(error => console.log(error))
+}))
