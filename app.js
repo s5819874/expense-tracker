@@ -10,6 +10,22 @@ const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 
 //function
+//計算金額
+async function getTotalAmount(keyword) {
+  if (keyword) {
+    let totalAmount = Record.aggregate({ "$match": { category: keyword } }, { "$sum": "$amount" })
+  } else {
+    return (Record.aggregate([
+      {
+        $group: {
+          _id: '',
+          sum: { $sum: "$amount" }
+        }
+      }
+    ]))
+  }
+  //$project: {name:1}可以選欄位
+}
 
 //加入Icon屬性的值
 function addIconValue(record) {
@@ -48,10 +64,17 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
 //set routers
+//瀏覽首頁含總金額
 app.get('/', ((req, res) => {
   Record.find()
     .lean()
-    .then(records => res.render('index', { records }))
+    .then(records => {
+      getTotalAmount()
+        .then(result => {
+          let totalAmount = result[0].sum
+          res.render('index', { records, totalAmount })
+        })
+    })
     .catch(error => console.log(error))
 }))
 
