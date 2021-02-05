@@ -70,6 +70,7 @@ app.use(methodOverride('_method'))
 app.get('/', ((req, res) => {
   Record.find()
     .lean()
+    .sort({ date: "desc" })
     .then(records => {
       getTotalAmount()
         .then(result => {
@@ -150,6 +151,20 @@ app.get('/records/search_by_category/:category', ((req, res) => {
         })
     })
     .catch(error => console.log(error))
+}))
+
+//route of analysis page
+app.get('/records/analysis', ((req, res) => {
+  Record.aggregate([{
+    "$group": {
+      _id: "$category", totalAmount: { "$sum": "$amount" }
+    }
+  }])
+    .sort({ totalAmount: "desc" })
+    .then(results => {
+      console.log(results)
+      res.render('analysis', { results })
+    })
 }))
 
 //start and listen on the server

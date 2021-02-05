@@ -1,12 +1,12 @@
 <div class="container d-flex flex-column align-items-center" style="height: 100vh;">
   <div class="d-flex justify-content-between mt-5" style="min-width: 300px;">
 
-    <a role="button" href="/records/new" class="btn font-weight-bolder text-white" style="background-color: lightcoral;"
-      type="submit" id="new-button"><i class="fas fa-plus"></i>
+    <a role="button" href="/records/new" class="btn font-weight-bolder mr-2 text-white"
+      style="background-color: lightcoral;" type="submit" id="new-button"><i class="fas fa-plus"></i>
       Expense</a>
 
     <div class="dropdown">
-      <button class="btn dropdown-toggle  font-weight-bolder text-white" style="background-color: lightseagreen;"
+      <button class="btn dropdown-toggle mr-2 font-weight-bolder text-white" style="background-color: lightseagreen;"
         type="button" id="dropdownCategoryButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Category
       </button>
@@ -20,9 +20,13 @@
       </div>
     </div>
 
+    <a role="button" href="/records/analysis" class="btn font-weight-bolder text-white"
+      style="background-color: lightsalmon;" type="submit" id="new-button">
+      Analysis</a>
+
   </div>
 
-  <div class="mt-5 pt-3 d-flex align-items-baseline ">
+  <div class="mt-4 pt-3 d-flex align-items-baseline ">
     <h4 class="font-weight-bolder">Total Amount:
       <h1 class="text-warning ml-4 display-3 border-bottom">{{totalAmount}}</h1>
     </h4>
