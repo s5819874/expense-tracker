@@ -47,13 +47,6 @@ function addIconValue(record) {
   return record
 }
 
-//計算總金額
-function TotalAmount(records) {
-  let amount = 0
-  records.forEach(record => amount += record.amount)
-  return amount
-}
-
 
 //connect database
 mongoose.connect('mongodb://localhost/expense-tracker', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -115,6 +108,7 @@ app.post('/records', ((req, res) => {
 app.put('/records/:id', ((req, res) => {
   const id = req.params.id
   let recordEdited = req.body
+  recordEdited.name = recordEdited.name.trim()
   let attributes = Object.keys(recordEdited)
   Record.findById(id)
     .then(record => {
@@ -123,9 +117,7 @@ app.put('/records/:id', ((req, res) => {
       })
       Category.find({ name: recordEdited.category })
         .then(category => {
-          console.log(category[0])
           record.icon = category[0].icon
-          console.log(record)
           record.save()
           return record
         })
@@ -144,10 +136,6 @@ app.delete('/records/:id', ((req, res) => {
     .catch(error => console.log(error))
 }))
 
-//start and listen on the server
-app.listen(port, () => {
-  console.log('Express is now listening on the server!')
-})
 
 //瀏覽類別搜尋含金額
 app.get('/records/search_by_category/:category', ((req, res) => {
@@ -163,3 +151,8 @@ app.get('/records/search_by_category/:category', ((req, res) => {
     })
     .catch(error => console.log(error))
 }))
+
+//start and listen on the server
+app.listen(port, () => {
+  console.log('Express is now listening on the server!')
+})
