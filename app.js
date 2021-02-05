@@ -144,11 +144,17 @@ app.get('/records/search_by_category/:category', ((req, res) => {
   Record.find({ category: keyword })
     .lean()
     .then(records => {
-      getTotalAmount(keyword)
-        .then(result => {
-          let totalAmount = result[0].sum
-          res.render('index', { records, totalAmount })
-        })
+      if (records[0]) {
+        getTotalAmount(keyword)
+          .then(result => {
+            let totalAmount = result[0].sum
+            res.render('index', { records, totalAmount })
+          })
+          .catch(error => console.log(error))
+      } else {
+        res.render('noSearchResult')
+      }
+
     })
     .catch(error => console.log(error))
 }))
