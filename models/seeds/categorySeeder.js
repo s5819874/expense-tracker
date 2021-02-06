@@ -1,7 +1,7 @@
 const Category = require('../category')
 const categoryList = require('./categoryList').categoryList
 
-const db = requiure('../../config/mongoose')
+const db = require('../../config/mongoose')
 
 db.once('open', () => {
 
