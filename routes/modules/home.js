@@ -12,8 +12,12 @@ router.get('/', ((req, res) => {
     .then(records => {
       getTotalAmount()
         .then(result => {
-          let totalAmount = result[0].sum
-          res.render('index', { records, totalAmount })
+          if (result[0]) {
+            let totalAmount = result[0].sum
+            res.render('index', { records, totalAmount })
+          } else {
+            res.render('index')
+          }
         })
     })
     .catch(error => console.log(error))
