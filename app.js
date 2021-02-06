@@ -2,23 +2,13 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
-const Record = require('./models/record')
-const Category = require('./models/category')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const routes = require('./routes')
+require('./config/mongoose')
 
-//connect database
-mongoose.connect('mongodb://localhost/expense-tracker', { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
-db.on('error', () => {
-  console.log('mongodb error!')
-})
-db.once('open', () => {
-  console.log('mongodb connected')
-})
+
 
 //set template engine
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
