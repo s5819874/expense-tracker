@@ -9,13 +9,15 @@ db.on('error', () => {
   console.log('mongodb error!')
 })
 db.once('open', () => {
-  categoryList.forEach(category => {
-    Category.create({
-      name: category.name,
-      name_ch: category.name_ch,
-      icon: category.icon_class
+
+  Category.create(categoryList)
+    .then(() => {
+      console.log('category seeds established!')
+      return db.close()
     })
-  })
-  console.log('mongodb connected!')
+    .then(() => {
+      console.log('database disconnected!')
+    })
+
 })
 

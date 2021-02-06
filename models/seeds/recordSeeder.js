@@ -19,5 +19,5 @@ db.once('open', () => {
       amount: 100
     })
   }
-  console.log('mongodb connected!')
+  console.log('record seeds established!')
 })
