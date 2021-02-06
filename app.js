@@ -168,7 +168,6 @@ app.get('/records/analysis', ((req, res) => {
   }])
     .sort({ totalAmount: "desc" })
     .then(results => {
-      console.log(results)
       res.render('analysis', { results })
     })
 }))
