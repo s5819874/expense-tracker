@@ -31,8 +31,10 @@ function getTotalAmount(keyword) {
 //import modules
 const home = require('./modules/home')
 const records = require('./modules/records')
+const users = require('./modules/users')
 
 //guide the routes
+router.use('/users', users)
 router.use('/', home)
 router.use('/records', records)
 
