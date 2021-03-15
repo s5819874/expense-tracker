@@ -9,6 +9,7 @@ const routes = require('./routes')
 require('./config/mongoose')
 const session = require('express-session')
 const flash = require('connect-flash')
+const usePassport = require('./config/passport')
 
 
 
@@ -25,6 +26,7 @@ app.use(session({
   saveUninitialized: true
 }))
 app.use(flash())
+usePassport(app)
 
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg')
