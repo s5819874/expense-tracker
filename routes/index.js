@@ -32,9 +32,12 @@ function getTotalAmount(keyword) {
 const home = require('./modules/home')
 const records = require('./modules/records')
 const users = require('./modules/users')
+const auth = require('./modules/auth')
+const { route } = require('./modules/users')
 
 //guide the routes
 router.use('/users', users)
+route.use('/auth', auth)
 router.use('/', home)
 router.use('/records', records)
 
