@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcryptjs')
+const User = require('../../models/user')
 
 router.get('/register', (req, res) => {
   res.render('register')
@@ -20,14 +21,15 @@ router.post('/register', (req, res) => {
   }
   //先回傳與資料庫無關之錯誤訊息，先行處理
   if (msgs.length) {
-    res.render('register', { msgs, name, email, password, confirmPassword })
+    //不加return，程式繼續往下走，會拿不完整資訊來建立user
+    return res.render('register', { msgs, name, email, password, confirmPassword })
   }
   User.findOne({ email })
     .then(user => {
       //檢查email有無重複使用 (因為會和資料庫互動，為了降低向其請求次數，最後再檢查)
       if (user) {
         msgs.push({ message: '此email已重複註冊!' })
-        res.render('register', { msgs, name, email, password, confirmPassword })
+        return res.render('register', { msgs, name, email, password, confirmPassword })
       }
       //無重複紀錄，創建新user
       return bcrypt
@@ -35,7 +37,7 @@ router.post('/register', (req, res) => {
         .then(salt => bcrypt.hash(password, salt))
         .then(hash => User.create({ name, email, password: hash }))
         .then(() => {
-          msgs.push({ message: '已註冊成功，請登入使用!' })
+          req.flash('success_msg', '已註冊成功，請登入使用!')
           res.render('login', { msgs })
         })
     })
