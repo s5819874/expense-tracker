@@ -7,7 +7,9 @@ const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const routes = require('./routes')
 require('./config/mongoose')
+const session = require('express-session')
 const flash = require('connect-flash')
+
 
 
 
@@ -17,6 +19,11 @@ app.set('view engine', 'hbs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+app.use(session({
+  secret: 'YouWillNerverKnow',
+  resave: false,
+  saveUninitialized: true
+}))
 app.use(flash())
 
 app.use((req, res, next) => {
