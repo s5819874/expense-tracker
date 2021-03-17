@@ -29,7 +29,7 @@ module.exports = (app) => {
       .catch(err => done(err, false))
   }))
 
-  passport.use(new FacebookStrategy({
+  passport.use(new facebookStrategy({
     clientID: '???',
     clientSecret: '???',
     callbackURL: 'http://localhost:3000/auth/facebook/callback',

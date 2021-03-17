@@ -18,6 +18,16 @@ const usePassport = require('./config/passport')
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+//register handlebars helper
+const Handlebars = require('handlebars')
+Handlebars.registerHelper('ifeq', function (a, b, options) {
+  if (a == b) {
+    return options.fn(this)
+  } else {
+    return options.inverse(this)
+  }
+});
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(session({

@@ -37,7 +37,7 @@ const { route } = require('./modules/users')
 
 //guide the routes
 router.use('/users', users)
-route.use('/auth', auth)
+router.use('/auth', auth)
 router.use('/', home)
 router.use('/records', records)
 

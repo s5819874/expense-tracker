@@ -20,6 +20,37 @@
       </div>
     </div>
 
+    <form action="/records/filter" method="GET">
+      <select class="form-select btn mr-2 font-weight-bolder text-white" style="background-color: lightseagreen;"
+        aria-label="Default select example" name="category" onchange="this.form.submit()">
+        <option value="">Category</option>
+        <option value="home" {{#ifeq category "home" }} selected {{/ifeq}}>Home</option>
+        <option value="transportation" {{#ifeq category "transportation" }} selected {{/ifeq}}>Transportation</option>
+        <option value="entertainment" {{#ifeq category "transportation" }} selected {{/ifeq}}>Entertainment</option>
+        <option value="food" {{#ifeq category "food" }} selected {{/ifeq}}>Food</option>
+        <option value="others" {{#ifeq category "others" }} selected {{/ifeq}}>Others</option>
+      </select>
+
+      <select class="form-select btn mr-2 font-weight-bolder text-white" style="background-color: lightseagreen;"
+        aria-label="Default select example" aria-label="Default select example" name="month"
+        onchange="this.form.submit()" {{#if month}} value={{month}} {{/if}}>
+        <option value="">Month</option>
+        <option {{#ifeq month 1 }} selected {{/ifeq}} value=1>Jan</option>
+        <option {{#ifeq month 2 }} selected {{/ifeq}} value=2>Feb</option>
+        <option {{#ifeq month 3 }} selected {{/ifeq}} value=3>Mar</option>
+        <option {{#ifeq month 4 }} selected {{/ifeq}} value=4>Apr</option>
+        <option {{#ifeq month 5 }} selected {{/ifeq}} value=5>May</option>
+        <option {{#ifeq month 6 }} selected {{/ifeq}} value=6>Jun</option>
+        <option {{#ifeq month 7 }} selected {{/ifeq}} value=7>Jul</option>
+        <option {{#ifeq month 8 }} selected {{/ifeq}} value=8>Aug</option>
+        <option {{#ifeq month 9 }} selected {{/ifeq}} value=9>Sep</option>
+        <option {{#ifeq month 10 }} selected {{/ifeq}} value=10>Oct</option>
+        <option {{#ifeq month 11 }} selected {{/ifeq}} value=11>Nov</option>
+        <option {{#ifeq month 12 }} selected {{/ifeq}} value=12>Dec</option>
+      </select>
+    </form>
+
+
     <a role="button" href="/records/analysis" class="btn font-weight-bolder text-white"
       style="background-color: lightsalmon;" type="submit" id="new-button">
       Analysis</a>

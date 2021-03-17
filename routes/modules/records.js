@@ -18,7 +18,8 @@ router.post('/', ((req, res) => {
     .then(category => {
       record.icon = category[0].icon
       Record.create(record)
-      res.redirect('/')
+        .then(record => console.log(record.date, record.date.getMonth()))
+        .then(res.redirect('/'))
     })
     .catch(error => console.log(error))
 }))
@@ -96,6 +97,78 @@ router.get('/search_by_category/:category', ((req, res) => {
     })
     .catch(error => console.log(error))
 }))
+
+router.get('/filter', (req, res) => {
+
+  let { category, month } = req.query
+
+  if (category && month) {
+    Record.aggregate([
+      { $addFields: { month: { $month: "$date" } } },
+      { $match: { month: parseInt(month), category } }
+    ])
+      .then(records => {
+        let totalAmount = 0
+        records.forEach(record => {
+          totalAmount += record.amount
+        })
+        res.render('index', { records, totalAmount })
+      })
+  } else {
+    Record.aggregate([
+      { $addFields: { month: { $month: "$date" } } },
+      { $match: { $or: [{ month: parseInt(month) }, { category: category }] } }
+    ])
+      .then(records => {
+        let totalAmount = 0
+        records.forEach(record => {
+          totalAmount += record.amount
+        })
+        res.render('index', { records, totalAmount, category, month })
+      })
+  }
+
+  /*
+    if (category && !month) {
+      Record.aggregate([
+        { $addFields: { month: { $month: "$date" } } },
+        { $match: { category: category } }
+      ])
+        .then(records => {
+          let totalAmount = 0
+          records.forEach(record => {
+            totalAmount += record.amount
+          })
+          res.render('index', { records, totalAmount })
+        })
+    } else if (!category && month) {
+      Record.aggregate([
+        { $addFields: { month: { $month: "$date" } } },
+        { $match: { month: parseInt(month) } }
+      ])
+        .then(records => {
+          let totalAmount = 0
+          records.forEach(record => {
+            totalAmount += record.amount
+          })
+          res.render('index', { records, totalAmount })
+        })
+    } else if (category && month) {
+      Record.aggregate([
+        { $addFields: { month: { $month: "$date" } } },
+        { $match: { month: parseInt(month), category: category } }
+      ])
+        .then(records => {
+          let totalAmount = 0
+          records.forEach(record => {
+            totalAmount += record.amount
+          })
+          res.render('index', { records, totalAmount, category, month })
+        })
+    }
+  */
+})
+
 
 //export router
 module.exports = router

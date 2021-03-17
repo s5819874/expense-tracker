@@ -1,11 +1,11 @@
 const Record = require('./models/record')
 
 //create get totalAmount function
-function getTotalAmount(keyword) {
-  if (keyword) {
+function getTotalAmount(category) {
+  if (category) {
     return (Record.aggregate([
       {
-        $match: { category: keyword }
+        $match: { category }
       },
       {
         $group: {
