@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const Record = require('../../models/record')
 const Category = require('../../models/category')
+const moment = require('moment')
 
 //create page
 router.get('/new', ((req, res) => {
@@ -94,6 +95,7 @@ router.get('/filter', (req, res) => {
         let totalAmount = 0
         records.forEach(record => {
           totalAmount += record.amount
+          record.date = moment(record.date).format("YYYY-MM-DD")
         })
         res.render('index', { records, totalAmount })
       })
@@ -107,6 +109,7 @@ router.get('/filter', (req, res) => {
         let totalAmount = 0
         records.forEach(record => {
           totalAmount += record.amount
+          record.date = moment(record.date).format("YYYY-MM-DD")
         })
         res.render('index', { records, totalAmount, category, month })
       })
