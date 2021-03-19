@@ -1,7 +1,10 @@
 //require packages
 const express = require('express')
 const app = express()
-const PORT = process.env.PORT || 3000
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+const PORT = process.env.PORT
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
@@ -31,7 +34,7 @@ Handlebars.registerHelper('ifeq', function (a, b, options) {
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(session({
-  secret: 'YouWillNerverKnow',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }))

@@ -4,7 +4,6 @@ const facebookStrategy = require('passport-facebook').Strategy
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 
-
 module.exports = (app) => {
   //初始化模組
   app.use(passport.initialize())
@@ -30,8 +29,8 @@ module.exports = (app) => {
   }))
 
   passport.use(new facebookStrategy({
-    clientID: '???',
-    clientSecret: '???',
+    clientID: process.env.FACEBOOK_ID,
+    clientSecret: process.env.FACEBOOK_SECRET,
     callbackURL: 'http://localhost:3000/auth/facebook/callback',
     profileFields: ['email', 'displayName']
   }, (accessToken, refreshToken, profile, done) => {
