@@ -5,30 +5,15 @@
       style="background-color: lightcoral;" type="submit" id="new-button"><i class="fas fa-plus"></i>
       Expense</a>
 
-    <div class="dropdown">
-      <button class="btn dropdown-toggle mr-2 font-weight-bolder text-white" style="background-color: lightseagreen;"
-        type="button" id="dropdownCategoryButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Category
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownCategoryButton">
-        <a class="dropdown-item" href="/">all</a>
-        <a class="dropdown-item" href="/records/search_by_category/home">home</a>
-        <a class="dropdown-item" href="/records/search_by_category/transportation">transportation</a>
-        <a class="dropdown-item" href="/records/search_by_category/entertainment">entertainment</a>
-        <a class="dropdown-item" href="/records/search_by_category/food">food</a>
-        <a class="dropdown-item" href="/records/search_by_category/others">others</a>
-      </div>
-    </div>
-
     <form action="/records/filter" method="GET">
       <select class="form-select btn mr-2 font-weight-bolder text-white" style="background-color: lightseagreen;"
         aria-label="Default select example" name="category" onchange="this.form.submit()">
         <option value="">Category</option>
-        <option value="home" {{#ifeq category "home" }} selected {{/ifeq}}>Home</option>
-        <option value="transportation" {{#ifeq category "transportation" }} selected {{/ifeq}}>Transportation</option>
-        <option value="entertainment" {{#ifeq category "transportation" }} selected {{/ifeq}}>Entertainment</option>
-        <option value="food" {{#ifeq category "food" }} selected {{/ifeq}}>Food</option>
-        <option value="others" {{#ifeq category "others" }} selected {{/ifeq}}>Others</option>
+        <option {{#ifeq category "home" }} selected {{/ifeq}} value="home">Home</option>
+        <option {{#ifeq category "transportation" }} selected {{/ifeq}}value="transportation">Transportation</option>
+        <option {{#ifeq category "entertainment" }} selected {{/ifeq}}value="entertainment">Entertainment</option>
+        <option {{#ifeq category "food" }} selected {{/ifeq}}value="food">Food</option>
+        <option {{#ifeq category "others" }} selected {{/ifeq}}value="others">Others</option>
       </select>
 
       <select class="form-select btn mr-2 font-weight-bolder text-white" style="background-color: lightseagreen;"

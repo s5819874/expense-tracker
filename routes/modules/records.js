@@ -3,7 +3,6 @@ const express = require('express')
 const router = express.Router()
 const Record = require('../../models/record')
 const Category = require('../../models/category')
-const getTotalAmount = require('../../getTotalAmount')
 
 //create page
 router.get('/new', ((req, res) => {
@@ -12,13 +11,13 @@ router.get('/new', ((req, res) => {
 
 //create new expense
 router.post('/', ((req, res) => {
+  const userId = req.user._id
   let record = req.body
   Category.find({ name: record.category })
     .lean()
     .then(category => {
       record.icon = category[0].icon
-      Record.create(record)
-        .then(record => console.log(record.date, record.date.getMonth()))
+      Record.create({ ...record, userId })
         .then(res.redirect('/'))
     })
     .catch(error => console.log(error))
@@ -27,8 +26,9 @@ router.post('/', ((req, res) => {
 
 //edit page
 router.get('/:id/edit', ((req, res) => {
-  const id = req.params.id
-  Record.findById(id)
+  const _id = req.params.id
+  const userId = req.user._id
+  Record.findOne({ _id, userId })
     .lean()
     .then(record => res.render('edit', { record }))
     .catch(error => console.log(error))
@@ -36,20 +36,15 @@ router.get('/:id/edit', ((req, res) => {
 
 //edit expense
 router.put('/:id', ((req, res) => {
-  const id = req.params.id
-  let recordEdited = req.body
-  recordEdited.name = recordEdited.name.trim()
-  let attributes = Object.keys(recordEdited)
-  Record.findById(id)
+  const _id = req.params.id
+  const userId = req.user._id
+  Record.findOne({ _id, userId })
     .then(record => {
-      attributes.forEach(key => {
-        record[key] = recordEdited[key]
-      })
-      Category.find({ name: recordEdited.category })
+      record = Object.assign(record, req.body)
+      Category.find({ name: record.category })
         .then(category => {
           record.icon = category[0].icon
-          record.save()
-          return record
+          return record.save()
         })
     })
     .then(() => res.redirect('/'))
@@ -58,8 +53,9 @@ router.put('/:id', ((req, res) => {
 
 //delete expense
 router.delete('/:id', ((req, res) => {
-  const id = req.params.id
-  Record.findById(id)
+  const _id = req.params.id
+  const userId = req.user._id
+  Record.findOne({ _id, userId })
     .then(record => record.remove())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
@@ -67,45 +63,32 @@ router.delete('/:id', ((req, res) => {
 
 //analysis page
 router.get('/analysis', ((req, res) => {
-  Record.aggregate([{
-    "$group": {
-      _id: "$category", totalAmount: { "$sum": "$amount" }
+  const userId = req.user._id
+  Record.aggregate([
+    {
+      $match: { userId }
+    },
+    {
+      "$group": {
+        _id: "$category", totalAmount: { "$sum": "$amount" }
+      }
     }
-  }])
+  ])
     .sort({ totalAmount: "desc" })
     .then(results => {
       res.render('analysis', { results })
     })
 }))
 
-//search by category
-router.get('/search_by_category/:category', ((req, res) => {
-  const keyword = req.params.category
-  Record.find({ category: keyword })
-    .lean()
-    .then(records => {
-      if (records[0]) {
-        getTotalAmount(keyword)
-          .then(result => {
-            let totalAmount = result[0].sum
-            res.render('index', { records, totalAmount })
-          })
-          .catch(error => console.log(error))
-      } else {
-        res.render('noSearchResult')
-      }
-    })
-    .catch(error => console.log(error))
-}))
-
+//filter of month and category
 router.get('/filter', (req, res) => {
-
+  const userId = req.user._id
   let { category, month } = req.query
-
+  console.log(req.query)
   if (category && month) {
     Record.aggregate([
       { $addFields: { month: { $month: "$date" } } },
-      { $match: { month: parseInt(month), category } }
+      { $match: { month: parseInt(month), category, userId } }
     ])
       .then(records => {
         let totalAmount = 0
@@ -117,6 +100,7 @@ router.get('/filter', (req, res) => {
   } else {
     Record.aggregate([
       { $addFields: { month: { $month: "$date" } } },
+      { $match: { userId } },
       { $match: { $or: [{ month: parseInt(month) }, { category: category }] } }
     ])
       .then(records => {
@@ -127,46 +111,6 @@ router.get('/filter', (req, res) => {
         res.render('index', { records, totalAmount, category, month })
       })
   }
-
-  /*
-    if (category && !month) {
-      Record.aggregate([
-        { $addFields: { month: { $month: "$date" } } },
-        { $match: { category: category } }
-      ])
-        .then(records => {
-          let totalAmount = 0
-          records.forEach(record => {
-            totalAmount += record.amount
-          })
-          res.render('index', { records, totalAmount })
-        })
-    } else if (!category && month) {
-      Record.aggregate([
-        { $addFields: { month: { $month: "$date" } } },
-        { $match: { month: parseInt(month) } }
-      ])
-        .then(records => {
-          let totalAmount = 0
-          records.forEach(record => {
-            totalAmount += record.amount
-          })
-          res.render('index', { records, totalAmount })
-        })
-    } else if (category && month) {
-      Record.aggregate([
-        { $addFields: { month: { $month: "$date" } } },
-        { $match: { month: parseInt(month), category: category } }
-      ])
-        .then(records => {
-          let totalAmount = 0
-          records.forEach(record => {
-            totalAmount += record.amount
-          })
-          res.render('index', { records, totalAmount, category, month })
-        })
-    }
-  */
 })
 
 
