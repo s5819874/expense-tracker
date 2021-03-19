@@ -51,15 +51,18 @@
 
   <ul class="list-group list-group-flush mt-4">
     {{#each records}}
-    <li class=" list-group-item border-0" style="width: 800px;">
+    <li class=" list-group-item border-0" style="width: 572px;">
       <div class="row">
         <div class="mx-auto border-bottom col-10 row d-flex align-items-center"
           style="background-color:rgb(227, 243, 250); border-left: 5px solid lightseagreen;">
-          <div class="col-3 d-flex flex-row align-items-center justify-content-around">
-            <i class="text-muted font-weight-bolder mr-2">{{this.date}}</i>
-            <i class="{{this.icon}} fa-2x"></i>
+          <div class="col-5 d-flex flex-row align-items-center justify-content-around">
+            <div class="date&merchant d-flex flex-column">
+              <div class="text-muted font-weight-bolder mr-2">{{this.date}}</div>
+              <div class="text-muted font-weight-bolder mr-2">@ {{this.merchant}}</div>
+            </div>
+            <i class="{{this.icon}} fa-2x mx-2"></i>
           </div>
-          <div class=" col-9 d-flex justify-content-between align-items-center border-botton"
+          <div class=" col-7 d-flex justify-content-between align-items-center border-botton"
             style="background-color:rgb(252, 237, 190)">
             <h3>
               {{ this.name }}

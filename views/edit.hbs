@@ -4,10 +4,17 @@
   <h5 class="my-4" style="color: lightcoral;">* Required</h5>
   <form action="/records/{{record._id}}?_method=PUT" method="POST" class="font-weight-bolder ">
     <div class="form-group row mb-4">
-      <label for="example-text-input" class="col-2 col-form-label">Name*</label>
+      <label for="name-input" class="col-2 col-form-label">Name*</label>
       <div class="col-10">
-        <input class="form-control" type="text" placeholder={{record.name}} value={{record.name}}
-          id="example-text-input" name="name" required>
+        <input class="form-control" type="text" placeholder={{record.name}} value={{record.name}} id="name-input"
+          name="name" required>
+      </div>
+    </div>
+    <div class="form-group row mb-4">
+      <label for="merchant-input" class="col-2 col-form-label">Merchant*</label>
+      <div class="col-10">
+        <input class="form-control" type="text" placeholder={{record.merchant}} value={{record.merchant}}
+          id="merchant-input" name="merchant" required>
       </div>
     </div>
     <div class="form-group row mb-4">
