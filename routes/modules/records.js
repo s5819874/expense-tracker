@@ -4,6 +4,7 @@ const router = express.Router()
 const Record = require('../../models/record')
 const Category = require('../../models/category')
 const moment = require('moment')
+const record = require('../../models/record')
 
 //create page
 router.get('/new', ((req, res) => {
@@ -116,6 +117,34 @@ router.get('/filter', (req, res) => {
   }
 })
 
+//search
+router.get('/search', (req, res) => {
+  const keyword = req.query.keyword
+  const userId = req.user._id
+  return Record.find({
+    userId,
+    $or: [
+      {
+        name: {
+          $regex: keyword,
+          $options: 'i'
+        }
+      },
+      {
+        merchant: {
+          $regex: keyword,
+          $options: 'i'
+        }
+      },
+    ]
+  })
+    .lean()
+    .then(records => {
+      records.forEach(record => record.date = moment(record.date).format("YYYY-MM-DD"))
+      res.render('index', { records, keyword })
+    })
+    .catch(err => res.send(err))
+})
 
 //export router
 module.exports = router

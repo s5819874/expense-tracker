@@ -42,6 +42,21 @@
 
   </div>
 
+  <div class="container-inline search-bar mt-5 ml-3" style="min-width: 480px;">
+    <div class=" search-bar-inner">
+      <form action="/records/search">
+        <div class="input-group">
+          <input type="text" name="keyword" value="{{keyword}}" class="form-control" placeholder="輸入名稱、商家"
+            aria-label="Restaurant Name..." value="" aria-describedby="search-button">
+          <div class="input-group-append">
+            <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search">
+              </i> 搜尋消費</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="mt-4 pt-3 d-flex align-items-baseline ">
     <h4 class="font-weight-bolder">Total Amount:
       <h1 class="text-warning ml-4 display-3 border-bottom">{{totalAmount}}</h1>
